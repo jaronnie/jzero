@@ -1,7 +1,6 @@
 {
-	"name": "@sdk/{{.Scope}}",
+	"name": "@sdk/{{.APP}}",
 	"description": "",
-	"main": "dist/index.js",
 	"author": "",
 	"dependencies": {
 		"umi-request": "^1.4.0"

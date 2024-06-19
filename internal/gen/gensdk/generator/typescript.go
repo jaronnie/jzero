@@ -80,6 +80,12 @@ func (t *Typescript) Gen() ([]*GeneratedFile, error) {
 		return nil, err
 	}
 	files = append(files, clientSetFile)
+
+	packageJsonFile, err := t.genPackageJson(GetScopes(rhis))
+	if err != nil {
+		return nil, err
+	}
+	files = append(files, packageJsonFile)
 	return files, nil
 }
 
@@ -94,5 +100,18 @@ func (t *Typescript) genClientSet(scopes []string) (*GeneratedFile, error) {
 	return &GeneratedFile{
 		Path:    "index.ts",
 		Content: *bytes.NewBuffer(clientBytes),
+	}, nil
+}
+
+func (t *Typescript) genPackageJson(scopes []string) (*GeneratedFile, error) {
+	packageJsonBytes, err := templatex.ParseTemplate(map[string]interface{}{
+		"APP": t.Config.APP,
+	}, embeded.ReadTemplateFile(filepath.Join("client", "client-ts", "package.json.tpl")))
+	if err != nil {
+		return nil, err
+	}
+	return &GeneratedFile{
+		Path:    "package.json",
+		Content: *bytes.NewBuffer(packageJsonBytes),
 	}, nil
 }
