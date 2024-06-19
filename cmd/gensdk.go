@@ -6,6 +6,7 @@ Copyright © 2024 jaronnie <jaron@jaronnie.com>
 package cmd
 
 import (
+	"github.com/pkg/errors"
 	"path/filepath"
 
 	"github.com/jzero-io/jzero/internal/gen/gensdk"
@@ -21,6 +22,11 @@ var genSdkCmd = &cobra.Command{
 	Long:  `jzero gensdk. Generate sdk client by api file and proto file`,
 	PreRun: func(_ *cobra.Command, _ []string) {
 		gensdk.Version = Version
+		if gensdk.Language == "go" {
+			if gensdk.Module == "" {
+				cobra.CheckErr(errors.New("must specify a module to generate sdk for"))
+			}
+		}
 	},
 	RunE: gensdk.GenSdk,
 }
@@ -33,7 +39,7 @@ func init() {
 	genSdkCmd.Flags().StringVarP(&gensdk.WorkingDir, "working-dir", "w", "", "set working dir")
 
 	genSdkCmd.Flags().StringVarP(&gensdk.Module, "module", "m", "", "set module name")
-	_ = genSdkCmd.MarkFlagRequired("module")
+	//_ = genSdkCmd.MarkFlagRequired("module")
 
 	genSdkCmd.Flags().StringVarP(&gensdk.ApiDir, "api-dir", "", filepath.Join("desc", "api"), "set input api dir")
 	genSdkCmd.Flags().StringVarP(&gensdk.ProtoDir, "proto-dir", "", filepath.Join("desc", "proto"), "set input proto dir")

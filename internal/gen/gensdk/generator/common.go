@@ -4,7 +4,7 @@ import (
 	"github.com/jzero-io/jzero/internal/gen/gensdk/vars"
 )
 
-func getScopes(rhis vars.ScopeResourceHTTPInterfaceMap) []string {
+func GetScopes(rhis vars.ScopeResourceHTTPInterfaceMap) []string {
 	var scopes []string
 	for k := range rhis {
 		scopes = append(scopes, string(k))
@@ -13,7 +13,7 @@ func getScopes(rhis vars.ScopeResourceHTTPInterfaceMap) []string {
 	return scopes
 }
 
-func getScopeResources(resource vars.ResourceHTTPInterfaceMap) []string {
+func GetScopeResources(resource vars.ResourceHTTPInterfaceMap) []string {
 	var resources []string
 
 	for k := range resource {
