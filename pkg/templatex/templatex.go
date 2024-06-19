@@ -8,9 +8,13 @@ import (
 	"github.com/jzero-io/jzero/pkg/stringx"
 )
 
-// ParseTemplate template
-func ParseTemplate(data interface{}, tplT []byte) ([]byte, error) {
-	t, err := template.New("production").Funcs(sprig.TxtFuncMap()).Funcs(RegisterTxtFuncMap()).Parse(string(tplT))
+// ParseTemplate parse template with register func
+func ParseTemplate(data interface{}, tplT []byte, funcMaps ...template.FuncMap) ([]byte, error) {
+	t := template.New("production").Funcs(sprig.TxtFuncMap()).Funcs(RegisterTxtFuncMap())
+	for _, fn := range funcMaps {
+		t = t.Funcs(fn)
+	}
+	t, err := t.Parse(string(tplT))
 	if err != nil {
 		return nil, err
 	}
